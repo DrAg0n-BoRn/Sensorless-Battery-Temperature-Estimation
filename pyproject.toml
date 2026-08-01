@@ -1,0 +1,18 @@
+[project]
+name = "sensorless_battery_temperature_estimation"
+version = "1.0.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = "==3.12.*"
+dependencies = [
+    "dragon-ml-toolbox[ml]==24.3.2",
+]
+
+[dependency-groups]
+dev = [
+    "jupytext>=1.19.1",
+]
+
+# Jupytext configuration
+[tool.jupytext]
+formats = "ipynb,md"

@@ -1,0 +1,75 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE specific files
+.vscode/
+.idea/
+*.swp
+*~
+
+# macOS
+.DS_Store
+
+#Image files
+*.svg
+*.png
+*.jpeg
+*.jpg
+*.ico
+*.icns
+*.bmp
+*.gif
+*.tiff
+*.webp
+*.tif
+
+# Files and Directories
+*.pth
+*.joblib
+start_data/*
+results/*
+backups/*
+test.py
+test.ipynb
+*.xlsx
+*.docx
+*.pptx
+*.pdf
+
+# Use jupytext to pair notebooks with MD files, ignore the .ipynb files
+*.ipynb
