@@ -7,7 +7,7 @@ jupyter:
       format_version: '1.3'
       jupytext_version: 1.19.5
   kernelspec:
-    display_name: sensorless-battery-temperature-estimation (3.12.13)
+    display_name: sensorless-battery-temperature-estimation (3.12.12)
     language: python
     name: python3
 ---
@@ -21,11 +21,11 @@ from ml_tools.data_exploration import (summarize_dataframe,
                                        plot_numeric_overview_boxplot_macro,
                                        plot_continuous_vs_target,
                                        plot_correlation_heatmap,
+                                       plot_pairgrid_continuous_vs_target,
                                        finalize_feature_schema,
                                        show_null_columns)
 
 from ml_tools.utilities import load_dataframe, save_dataframe_with_schema, merge_dataframes
-from ml_tools.schema import FeatureSchema
 
 from paths import PM
 from constants import TARGET, RawColumns, EngineeredColumns, TEST_SUBSET_STRATEGY
@@ -167,14 +167,32 @@ plot_correlation_heatmap(df=df_test,
 plot_continuous_vs_target(df_continuous=df_train_features, 
                           df_targets=df_train_targets, 
                           save_dir=PM.engineering_plots_train,
-                          palette="Set2")
+                          color="tab:brown")
 ```
 
 ```python
 plot_continuous_vs_target(df_continuous=df_test_features, 
                           df_targets=df_test_targets, 
                           save_dir=PM.engineering_plots_test,
-                          palette="tab10")
+                          color="tab:purple")
+```
+
+```python
+plot_pairgrid_continuous_vs_target(df_continuous=df_train_features,
+                                   df_targets=df_train_targets,
+                                   save_dir=PM.engineering_plots_train,
+                                   color="tab:orange",
+                                   hexbin_lower=True,
+                                   log_diagonal=True)
+```
+
+```python
+plot_pairgrid_continuous_vs_target(df_continuous=df_test_features,
+                                   df_targets=df_test_targets,
+                                   save_dir=PM.engineering_plots_test,
+                                   color="tab:purple",
+                                   hexbin_lower=True,
+                                   log_diagonal=True)
 ```
 
 ## 6. Create Feature Schema

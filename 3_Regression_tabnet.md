@@ -7,7 +7,7 @@ jupyter:
       format_version: '1.3'
       jupytext_version: 1.19.5
   kernelspec:
-    display_name: sensorless-battery-temperature-estimation (3.12.13)
+    display_name: sensorless-battery-temperature-estimation (3.12.12)
     language: python
     name: python3
 ---
@@ -15,16 +15,16 @@ jupyter:
 ```python
 from ml_tools.ML_datasetmaster import DragonDataset as ChosenDataset
 from ml_tools.ML_trainer import DragonTrainer as ChosenTrainer
-from ml_tools.ML_models import DragonNodeModel as ChosenModel
+from ml_tools.ML_models import DragonTabNet as ChosenModel
 from ml_tools.ML_configuration import (
     FormatRegressionMetrics as ChosenMetricsConfig, 
     FinalizeRegression as ChosenFinalizer, 
-    DragonNodeParams as ChosenModelParams,    
+    DragonTabNetParams as ChosenModelParams,    
 )
 
 from ml_tools.ML_configuration import DragonTrainingConfig
-from ml_tools.ML_callbacks import DragonModelCheckpoint, DragonPatienceEarlyStopping, DragonPlateauScheduler
-from ml_tools.ML_utilities import build_optimizer_params, inspect_model_architecture
+from ml_tools.ML_callbacks import DragonPatienceEarlyStopping, DragonPlateauScheduler
+from ml_tools.ML_utilities import build_optimizer_params
 from ml_tools.IO_tools import train_logger
 from ml_tools.schema import FeatureSchema
 from ml_tools.keys import TaskKeys
@@ -42,7 +42,7 @@ from constants import TARGET
 SCHEMA_PATH = PM.engineering
 TRAIN_DATASET_PATH = PM.train_dataset
 TEST_DATASET_PATH = PM.test_dataset
-TRAIN_ARTIFACTS_DIR = PM.regression
+TRAIN_ARTIFACTS_DIR = PM.regression_tabnet
 ```
 
 ## 1. Load Schema and Dataset
@@ -63,19 +63,17 @@ dataset_test = ChosenDataset.from_bundle(TEST_DATASET_PATH)
 
 ```python
 train_config = DragonTrainingConfig(
-    validation_size=dataset_train.validation_split,
-    test_size=0, # a complete independent test set
-    initial_learning_rate=0.001,
-    batch_size=64,
+    initial_learning_rate=0.003,
+    batch_size=1024,
     task = TaskKeys.REGRESSION,
     device = "cuda:0",
-    finalized_filename = "node",
+    finalized_filename = "tabnet",
     
     targets=TARGET,
-    weight_decay=0.005,
+    weight_decay=0.01,
     early_stop_patience=25,
-    scheduler_patience=6,
-    scheduler_lr_factor=0.8,
+    scheduler_patience=4,
+    scheduler_lr_factor=0.6,
     monitor_metric="Validation Loss"
 )
 ```
@@ -86,16 +84,7 @@ train_config = DragonTrainingConfig(
 model_params = ChosenModelParams(
     schema=schema,
     out_targets=dataset_train.number_of_targets,
-    embedding_dim=24,
-    num_trees=512,
-    num_layers=2,
-    tree_depth=6,
-    additional_tree_output_dim=2,
-    input_dropout=0.1,
-    embedding_dropout=0.1,
-    choice_function='entmax',
-    bin_function='entmoid',
-    batch_norm_continuous=False
+    batch_norm_continuous=True
 )
 
 model = ChosenModel(**model_params)
@@ -115,12 +104,12 @@ trainer = ChosenTrainer(model=model,
                         kind=train_config.task,
                         optimizer=optimizer,
                         device=train_config.device,
-                        checkpoint_callback=DragonModelCheckpoint(monitor=train_config.monitor_metric),
                         early_stopping_callback=DragonPatienceEarlyStopping(patience=train_config.early_stop_patience, 
                                                                             monitor=train_config.monitor_metric),
                         lr_scheduler_callback=DragonPlateauScheduler(monitor=train_config.monitor_metric,
                                                                      patience=train_config.scheduler_patience,
-                                                                     factor=train_config.scheduler_lr_factor),  
+                                                                     factor=train_config.scheduler_lr_factor),
+                        checkpoint_config="default"
                         )
 ```
 
@@ -135,7 +124,7 @@ history = trainer.fit(epochs=1000, batch_size=train_config.batch_size)
 ```python
 trainer.evaluate(model_checkpoint="best",
                 test_data=dataset_test.train_dataset, # all test data is in the train_dataset of the test dataset bundle
-                val_format_configuration=ChosenMetricsConfig(scatter_color="orange"),
+                val_format_configuration=ChosenMetricsConfig(scatter_color="orange", boxplot_palette="Set2"),
                 test_format_configuration=ChosenMetricsConfig(scatter_color="fuchsia"),
                 )
 ```
@@ -150,8 +139,8 @@ trainer.explain_captum(explain_dataset=dataset_test.train_dataset,
 
 ```python
 trainer.explain_shap(explain_dataset=dataset_test.train_dataset,
-                    n_samples=1000,
-                    explainer_type="deep")
+                    n_samples=100,
+                    explainer_type="kernel")
 ```
 
 ## 6. Save artifacts
@@ -162,7 +151,6 @@ dataset_train.save_artifacts(TRAIN_ARTIFACTS_DIR)
 
 # Model artifacts
 model.save_architecture(TRAIN_ARTIFACTS_DIR)
-inspect_model_architecture(model=model, save_dir=TRAIN_ARTIFACTS_DIR)
 
 # FeatureSchema
 schema.to_json(TRAIN_ARTIFACTS_DIR)

@@ -25,7 +25,10 @@ PM.test_dataset = PM.train / "Test Dataset"
 
 ### Regression
 PM.regression = PM.results / "3 Regression"
-
+PM.regression_node = PM.regression / "NODE"
+PM.regression_autoint = PM.regression / "AutoInt"
+PM.regression_tabnet = PM.regression / "TabNet"
+PM.regression_gate = PM.regression / "GATE"
 
 # 3. Make directories and check status
 PM.make_dirs()

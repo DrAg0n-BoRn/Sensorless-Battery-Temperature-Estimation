@@ -5,7 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = "==3.12.*"
 dependencies = [
-    "dragon-ml-toolbox[ml]==24.3.2",
+    "dragon-ml-toolbox[ml]==25.0.1",
 ]
 
 [dependency-groups]
