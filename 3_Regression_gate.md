@@ -18,14 +18,12 @@ from ml_tools.ML_trainer import DragonTrainer as ChosenTrainer
 from ml_tools.ML_models import DragonGateModel as ChosenModel
 from ml_tools.ML_configuration import (
     FormatRegressionMetrics as ChosenMetricsConfig, 
-    FinalizeRegression as ChosenFinalizer, 
-    DragonGateParams as ChosenModelParams,    
+    FinalizeRegression as ChosenFinalizer  
 )
 
 from ml_tools.ML_configuration import DragonTrainingConfig
 from ml_tools.ML_callbacks import DragonPatienceEarlyStopping, DragonPlateauScheduler
 from ml_tools.ML_utilities import build_optimizer_params
-from ml_tools.IO_tools import train_logger
 from ml_tools.schema import FeatureSchema
 from ml_tools.keys import TaskKeys
 from torch.optim import AdamW
@@ -39,7 +37,7 @@ from constants import TARGET
 ```
 
 ```python
-SCHEMA_PATH = PM.engineering
+SCHEMA_PATH = PM.engineering_regression
 TRAIN_DATASET_PATH = PM.train_dataset
 TEST_DATASET_PATH = PM.test_dataset
 TRAIN_ARTIFACTS_DIR = PM.regression_gate
@@ -81,13 +79,13 @@ train_config = DragonTrainingConfig(
 ## 3. Model and Trainer
 
 ```python
-model_params = ChosenModelParams(
+model = ChosenModel(
     schema=schema,
     out_targets=dataset_train.number_of_targets,
     embedding_dim=64,
     gflu_stages = 6,
     gflu_dropout = 0.1,
-    num_trees = 20,
+    num_trees = 10,
     tree_depth = 4,
     tree_dropout = 0.1,
     chain_trees = True,
@@ -98,8 +96,6 @@ model_params = ChosenModelParams(
     share_head_weights = True,
     batch_norm_continuous = True
 )
-
-model = ChosenModel(**model_params)
 
 # Initialize decision thresholds before training.
 if hasattr(model, "data_aware_initialization"):
@@ -127,7 +123,7 @@ trainer = ChosenTrainer(model=model,
 ## 4. Training
 
 ```python
-history = trainer.fit(epochs=1000, batch_size=train_config.batch_size)
+trainer.fit(epochs=1000, batch_size=train_config.batch_size)
 ```
 
 ## 5. Evaluation
@@ -163,14 +159,8 @@ dataset_train.save_artifacts(TRAIN_ARTIFACTS_DIR)
 # Model artifacts
 model.save_architecture(TRAIN_ARTIFACTS_DIR)
 
-# FeatureSchema
-schema.to_json(TRAIN_ARTIFACTS_DIR)
-
 # Train log
-train_logger(train_config=train_config,
-             model_parameters=model_params,
-             train_history=history,
-             save_directory=TRAIN_ARTIFACTS_DIR)
+trainer.save_training_log(train_config=train_config)
 ```
 
 ## 7. Finalize Deep Learning

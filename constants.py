@@ -11,7 +11,7 @@ class RawColumns:
 # Engineered data columns
 class EngineeredColumns:
     STRATEGY = "Strategy"
-    TIME = "Time (h)"
+    # TIME = "Time (h)"
     CURRENT = "Current (A)"
     VOLTAGE = "Voltage (V)"
     CELL_TEMPERATURE = "Cell Temperature (K)"
@@ -21,3 +21,6 @@ TARGET = EngineeredColumns.CELL_TEMPERATURE
 
 # Strategies: BMP, BMR, SPM
 TEST_SUBSET_STRATEGY = "SPM"
+
+# Sequence
+SEQUENCE_LENGTH = 28  # From feature engineering plots (temporal analysis)

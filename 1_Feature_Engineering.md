@@ -22,10 +22,11 @@ from ml_tools.data_exploration import (summarize_dataframe,
                                        plot_continuous_vs_target,
                                        plot_correlation_heatmap,
                                        plot_pairgrid_continuous_vs_target,
-                                       finalize_feature_schema,
+                                       plot_target_temporal_analysis,
                                        show_null_columns)
-
+from ml_tools.outlier_detection import drop_outliers_rule
 from ml_tools.utilities import load_dataframe, save_dataframe_with_schema, merge_dataframes
+from ml_tools.schema import finalize_feature_schema
 
 from paths import PM
 from constants import TARGET, RawColumns, EngineeredColumns, TEST_SUBSET_STRATEGY
@@ -52,30 +53,60 @@ df_clean[RawColumns.ENVIRONMENT_TEMPERATURE] = df_clean[RawColumns.ENVIRONMENT_T
 ```
 
 ```python
-summarize_dataframe(df_clean)
-```
-
-```python
 # Select subset where cell temperature is not null
 df_clean = df_clean[df_clean[RawColumns.CELL_TEMPERATURE].notnull()]
 ```
 
 ```python
-# Transform time to hours, centigrade to Kelvin
-df_clean[RawColumns.TIME] = df_clean[RawColumns.TIME] / 60 / 60
+summarize_dataframe(df_clean)
+```
+
+```python
+# Transform centigrade to Kelvin
 df_clean[RawColumns.ENVIRONMENT_TEMPERATURE] = df_clean[RawColumns.ENVIRONMENT_TEMPERATURE] + 273.15
 df_clean[RawColumns.CELL_TEMPERATURE] = df_clean[RawColumns.CELL_TEMPERATURE] + 273.15
 ```
 
 ```python
+# Order dataset by time
+df_clean.sort_values(by=[RawColumns.TIME], inplace=True)
+df_clean.head(15)
+```
+
+```python
+# Drop time column and round up to 6 decimal places
+df_clean = df_clean.drop(columns=[RawColumns.TIME]).round(6)
+```
+
+```python
 # rename columns from RawColumns to EngineeredColumns
 df_clean.rename(columns={
-    RawColumns.TIME: EngineeredColumns.TIME,
     RawColumns.CURRENT: EngineeredColumns.CURRENT,
     RawColumns.VOLTAGE: EngineeredColumns.VOLTAGE,
     RawColumns.ENVIRONMENT_TEMPERATURE: EngineeredColumns.ENVIRONMENT_TEMPERATURE,
     RawColumns.CELL_TEMPERATURE: EngineeredColumns.CELL_TEMPERATURE,
 }, inplace=True)
+```
+
+```python
+summarize_dataframe(df_clean)
+```
+
+```python
+# Identify faulty entries where cell temperature > sensible threshold
+temperature_threshold = 312  # Kelvin
+suspect_entries = df_clean[df_clean[EngineeredColumns.CELL_TEMPERATURE] >= temperature_threshold]
+len(suspect_entries)
+```
+
+```python
+suspect_entries
+```
+
+```python
+df_clean = drop_outliers_rule(df=df_clean,
+                              bounds_dict={EngineeredColumns.CELL_TEMPERATURE: (0, temperature_threshold)},
+                              reset_index=True)
 ```
 
 ```python
@@ -91,6 +122,12 @@ df_train = df_clean[df_clean[EngineeredColumns.STRATEGY] != TEST_SUBSET_STRATEGY
 ```
 
 ```python
+# Drop Strategy column after spliting
+df_train.drop(columns=[EngineeredColumns.STRATEGY], inplace=True)
+df_test.drop(columns=[EngineeredColumns.STRATEGY], inplace=True)
+```
+
+```python
 summarize_dataframe(df_train)
 ```
 
@@ -101,23 +138,16 @@ summarize_dataframe(df_test)
 ## 4. Split Features and Targets
 
 ```python
-# Drop Strategy column from train and test subsets
-df_train.drop(columns=[EngineeredColumns.STRATEGY], inplace=True)
-df_test.drop(columns=[EngineeredColumns.STRATEGY], inplace=True)
-```
-
-```python
-# use float values with maximum 6 decimal places
-df_train = df_train.round(6)
-df_test = df_test.round(6)
-```
-
-```python
 df_train_features, df_train_targets = split_features_targets(df_train, targets=[TARGET])
 ```
 
 ```python
 df_test_features, df_test_targets = split_features_targets(df_test, targets=[TARGET])
+```
+
+```python
+# assert that the train and test subsets have the same columns and order
+assert list(df_train_features.columns) == list(df_test_features.columns), "Train and test feature subsets have different columns"
 ```
 
 ## 5. Plots
@@ -195,18 +225,21 @@ plot_pairgrid_continuous_vs_target(df_continuous=df_test_features,
                                    log_diagonal=True)
 ```
 
-## 6. Create Feature Schema
-
 ```python
-# assert that the train and test subsets have the same columns
-assert set(df_train_features.columns) == set(df_test_features.columns), "Train and test subsets have different columns"
+# sequence to value analysis (testing several lag lengths to visually determine the optimal value)
+plot_target_temporal_analysis(df=df_train,
+                              continuous_targets=[TARGET],
+                              categorical_targets=None,
+                              save_dir=PM.engineering_plots_train,
+                              max_lag=50)
 ```
 
-```python
-schema = finalize_feature_schema(df_features=df_train_features, categorical_mappings=None)
-```
+Optimal sequence length for the sequence-to-value added to `constants.py`. 
 
-## 7. Merge dataframes in expected column order
+This is based on the analysis of the temporal dependencies in the data.
+
+
+## 6. Merge dataframes
 
 ```python
 df_train_final = merge_dataframes(df_train_features, df_train_targets, direction="horizontal")
@@ -217,6 +250,11 @@ df_test_final = merge_dataframes(df_test_features, df_test_targets, direction="h
 ```
 
 ```python
+# assert that the train and test subsets have the same columns and order
+assert list(df_train_final.columns) == list(df_test_final.columns), "Train and test subsets have different columns"
+```
+
+```python
 show_null_columns(df_train_final)
 ```
 
@@ -224,17 +262,46 @@ show_null_columns(df_train_final)
 show_null_columns(df_test_final)
 ```
 
-## 7. Save Artifacts
+## 7. Create Feature Schema
 
 ```python
-save_dataframe_with_schema(df=df_train_final, full_path=PM.engineering_train_file, schema=schema)
+schema_regression = finalize_feature_schema(df_features=df_test_features, categorical_mappings=None)
 ```
 
 ```python
-save_dataframe_with_schema(df=df_test_final, full_path=PM.engineering_test_file, schema=schema)
+# target must be included for sequence-to-value pipeline
+schema_sequence = finalize_feature_schema(df_features=df_test_final, categorical_mappings=None)
+```
+
+## 8. Save Artifacts
+
+
+Regression
+
+```python
+save_dataframe_with_schema(df=df_train_final, full_path=PM.engineering_train_file, schema=schema_regression)
 ```
 
 ```python
-schema.to_json(PM.engineering)
-schema.save_artifacts(PM.engineering)
+save_dataframe_with_schema(df=df_test_final, full_path=PM.engineering_test_file, schema=schema_regression)
+```
+
+```python
+schema_regression.to_json(PM.engineering_regression)
+schema_regression.save_artifacts(PM.engineering_regression)
+```
+
+Sequence
+
+```python
+save_dataframe_with_schema(df=df_train_final, full_path=PM.engineering_sequence_train_file, schema=schema_sequence)
+```
+
+```python
+save_dataframe_with_schema(df=df_test_final, full_path=PM.engineering_sequence_test_file, schema=schema_sequence)
+```
+
+```python
+schema_sequence.to_json(PM.engineering_sequence)
+schema_sequence.save_artifacts(PM.engineering_sequence)
 ```

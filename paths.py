@@ -15,13 +15,22 @@ PM.raw_file = PM.start_data / "all_profile_data.csv"
 PM.engineering = PM.results / "1 Feature Engineering"
 PM.engineering_plots_train = PM.engineering / "Engineering Plots Train-Validation"
 PM.engineering_plots_test = PM.engineering / "Engineering Plots Test"
-PM.engineering_train_file = PM.engineering / "engineered_train.csv"
-PM.engineering_test_file = PM.engineering / "engineered_test.csv"
+
+PM.engineering_regression = PM.engineering / "Engineering Regression"
+PM.engineering_train_file = PM.engineering_regression / "engineered_train.csv"
+PM.engineering_test_file = PM.engineering_regression / "engineered_test.csv"
+
+PM.engineering_sequence = PM.engineering / "Engineering Sequence"
+PM.engineering_sequence_train_file = PM.engineering_sequence / "engineered_sequence_train.csv"
+PM.engineering_sequence_test_file = PM.engineering_sequence / "engineered_sequence_test.csv"
 
 ### Train Data
 PM.train = PM.results / "2 Train Data"
 PM.train_dataset = PM.train / "Train-Validation Dataset"
 PM.test_dataset = PM.train / "Test Dataset"
+
+PM.sequence_train_dataset = PM.train / "Sequence Train-Validation Dataset"
+PM.sequence_test_dataset = PM.train / "Sequence Test Dataset"
 
 ### Regression
 PM.regression = PM.results / "3 Regression"
@@ -29,6 +38,11 @@ PM.regression_node = PM.regression / "NODE"
 PM.regression_autoint = PM.regression / "AutoInt"
 PM.regression_tabnet = PM.regression / "TabNet"
 PM.regression_gate = PM.regression / "GATE"
+
+### Sequence-to-Value
+PM.sequence = PM.results / "4 Sequence-to-Value"
+PM.sequence_lstm = PM.sequence / "LSTM"
+PM.sequence_transformer = PM.sequence / "Transformer"
 
 # 3. Make directories and check status
 PM.make_dirs()

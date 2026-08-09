@@ -7,7 +7,7 @@ jupyter:
       format_version: '1.3'
       jupytext_version: 1.19.5
   kernelspec:
-    display_name: sensorless-battery-temperature-estimation (3.12.13)
+    display_name: sensorless-battery-temperature-estimation (3.12.12)
     language: python
     name: python3
 ---
@@ -22,7 +22,7 @@ from paths import PM
 ```
 
 ```python
-SCHEMA_PATH = PM.engineering
+SCHEMA_PATH = PM.engineering_regression
 
 TRAIN_DATASET_INPUT_FILE = PM.engineering_train_file
 TRAIN_DATASET_OUTPUT_DIR = PM.train_dataset
@@ -62,13 +62,16 @@ dataset_train = ChosenDataset(pandas_df=df_train,
 ```
 
 ```python
+assert dataset_train.feature_scaler is not None, "Feature scaler is not fitted."
+assert dataset_train.target_scaler is not None, "Target scaler is not fitted."
+
 dataset_test = ChosenDataset(pandas_df=df_test,
                         schema=schema,
                         kind=TaskKeys.REGRESSION,
                         feature_scaler=dataset_train.feature_scaler, # use the same scaler as the training set
                         target_scaler=dataset_train.target_scaler, # use the same scaler as the training set
-                        validation_size=0, # no validation set is needed for the test set
-                        test_size=0, # no test set is needed for the test set
+                        validation_size=0, # not needed for the test set
+                        test_size=0, # not needed for the test set
                         random_state=42
                         )
 ```
