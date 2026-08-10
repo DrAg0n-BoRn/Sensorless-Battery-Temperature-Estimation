@@ -29,8 +29,11 @@ PM.train = PM.results / "2 Train Data"
 PM.train_dataset = PM.train / "Train-Validation Dataset"
 PM.test_dataset = PM.train / "Test Dataset"
 
-PM.sequence_train_dataset = PM.train / "Sequence Train-Validation Dataset"
-PM.sequence_test_dataset = PM.train / "Sequence Test Dataset"
+PM.sequence_train_dataset = PM.train / "Sequence-to-Value Train-Validation Dataset"
+PM.sequence_test_dataset = PM.train / "Sequence-to-Value Test Dataset"
+
+PM.seq_seq_train_dataset = PM.train / "Sequence-to-Sequence Train-Validation Dataset"
+PM.seq_seq_test_dataset = PM.train / "Sequence-to-Sequence Test Dataset"
 
 ### Regression
 PM.regression = PM.results / "3 Regression"
@@ -43,6 +46,16 @@ PM.regression_gate = PM.regression / "GATE"
 PM.sequence = PM.results / "4 Sequence-to-Value"
 PM.sequence_lstm = PM.sequence / "LSTM"
 PM.sequence_transformer = PM.sequence / "Transformer"
+
+### Sequence-to-Sequence
+PM.seq_seq = PM.results / "5 Sequence-to-Sequence"
+PM.seq_seq_lstm = PM.seq_seq / "LSTM"
+PM.seq_seq_transformer = PM.seq_seq / "Transformer"
+
+# physics informed ML
+PM.pilf = PM.results / "6 Physics-Informed ML"
+PM.pilf_lstm = PM.pilf / "LSTM-PILF"
+
 
 # 3. Make directories and check status
 PM.make_dirs()
