@@ -56,6 +56,16 @@ PM.seq_seq_transformer = PM.seq_seq / "Transformer"
 PM.pilf = PM.results / "6 Physics-Informed ML"
 PM.pilf_lstm = PM.pilf / "LSTM-PILF"
 
+# physics informed ML V2
+PM.pilf_v2 = PM.results / "7 Physics-Informed ML V2"
+PM.pilf_v2_lstm = PM.pilf_v2 / "LSTM-PILF-V2"
+
+# physics informed ML V3 - Seq-Val
+PM.pilf_v3 = PM.results / "8 Physics-Informed ML V3 Seq-Val"
+PM.pilf_v3_lstm = PM.pilf_v3 / "LSTM-PILF-V3"
+
+# Metrics DataFrames
+PM.metrics = PM.results / "9 Metrics DataFrames"
 
 # 3. Make directories and check status
 PM.make_dirs()

@@ -5,7 +5,7 @@ description = "A project for estimating Li-ion cell battery surface temperature 
 readme = "README.md"
 requires-python = "==3.12.*"
 dependencies = [
-    "dragon-ml-toolbox[ml]==25.4.2",
+    "dragon-ml-toolbox[ml]==25.5.0",
 ]
 
 [dependency-groups]

@@ -24,3 +24,7 @@ TEST_SUBSET_STRATEGY = "SPM"
 
 # Sequence
 SEQUENCE_LENGTH = 28  # From feature engineering plots (temporal analysis)
+
+# Minimum and maximum temperature values for PILF
+MIN_ENVIRONMENT_TEMPERATURE = 295.25  # Minimum environment temperature in the whole dataset in Kelvin
+MAX_CELL_TEMPERATURE = 311.39  # Maximum cell temperature in the whole dataset in Kelvin

@@ -113,6 +113,19 @@ df_clean = drop_outliers_rule(df=df_clean,
 summarize_dataframe(df_clean)
 ```
 
+```python
+# minimum environment temperature
+df_clean[EngineeredColumns.ENVIRONMENT_TEMPERATURE].min()
+```
+
+```python
+# maximum cell temperature
+df_clean[EngineeredColumns.CELL_TEMPERATURE].max()
+```
+
+Store minimum and maximum temperature values in `constants.py` for later use in custom PILF.
+
+
 ## 3. Split train and test sets
 
 ```python
