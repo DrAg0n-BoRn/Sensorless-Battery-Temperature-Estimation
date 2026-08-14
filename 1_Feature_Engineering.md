@@ -15,7 +15,7 @@ jupyter:
 # Feature Engineering
 
 ```python
-from ml_tools.data_exploration import (summarize_dataframe,
+from dragon.data_exploration import (summarize_dataframe,
                                        split_features_targets,
                                        plot_value_distributions_multi,
                                        plot_numeric_overview_boxplot_macro,
@@ -24,9 +24,9 @@ from ml_tools.data_exploration import (summarize_dataframe,
                                        plot_pairgrid_continuous_vs_target,
                                        plot_target_temporal_analysis,
                                        show_null_columns)
-from ml_tools.outlier_detection import drop_outliers_rule
-from ml_tools.utilities import load_dataframe, save_dataframe_with_schema, merge_dataframes
-from ml_tools.schema import finalize_feature_schema
+from dragon.outlier_detection import drop_outliers_rule
+from dragon.utilities import load_dataframe, save_dataframe_with_schema, merge_dataframes
+from dragon.schema import finalize_feature_schema
 
 from paths import PM
 from constants import TARGET, RawColumns, EngineeredColumns, TEST_SUBSET_STRATEGY

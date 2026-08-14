@@ -13,19 +13,19 @@ jupyter:
 ---
 
 ```python
-from ml_tools.ML_datasetmaster import DragonDataset as ChosenDataset
-from ml_tools.ML_trainer import DragonTrainer as ChosenTrainer
-from ml_tools.ML_models import DragonAutoInt as ChosenModel
-from ml_tools.ML_configuration import (
+from dragon.ML_datasetmaster import DragonDataset as ChosenDataset
+from dragon.ML_trainer import DragonTrainer as ChosenTrainer
+from dragon.ML_models import DragonAutoInt as ChosenModel
+from dragon.ML_configuration import (
     FormatRegressionMetrics as ChosenMetricsConfig, 
     FinalizeRegression as ChosenFinalizer, 
 )
 
-from ml_tools.ML_configuration import DragonTrainingConfig
-from ml_tools.ML_callbacks import DragonPatienceEarlyStopping, DragonPlateauScheduler
-from ml_tools.ML_utilities import build_optimizer_params
-from ml_tools.schema import FeatureSchema
-from ml_tools.keys import TaskKeys
+from dragon.ML_configuration import DragonTrainingConfig
+from dragon.ML_callbacks import DragonPatienceEarlyStopping, DragonPlateauScheduler
+from dragon.ML_utilities import build_optimizer_params
+from dragon.schema import FeatureSchema
+from dragon.keys import TaskKeys
 from torch.optim import AdamW
 
 from paths import PM

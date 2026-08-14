@@ -16,19 +16,19 @@ jupyter:
 from custom_trainer import SequenceThermalInformedTrainer as ChosenTrainer
 from pilf import ThermalInformedLoss
 
-from ml_tools.ML_datasetmaster import DragonDatasetSequenceExogenous as ChosenDataset
-from ml_tools.ML_models_sequence import DragonSequenceLSTM as ChosenModel
-from ml_tools.ML_configuration import (
+from dragon.ML_datasetmaster import DragonDatasetSequenceExogenous as ChosenDataset
+from dragon.ML_models_sequence import DragonSequenceLSTM as ChosenModel
+from dragon.ML_configuration import (
     FormatExogenousSequenceSequenceMetrics as ChosenMetricsConfig, 
     FinalizeExogenousSequenceSequence as ChosenFinalizer,
     FormatRegressionMetrics
 )
 
-from ml_tools.ML_configuration import DragonTrainingConfig
-from ml_tools.ML_callbacks import DragonPatienceEarlyStopping, DragonPlateauScheduler
-from ml_tools.ML_utilities import build_optimizer_params
-from ml_tools.schema import FeatureSchema
-from ml_tools.keys import TaskKeys
+from dragon.ML_configuration import DragonTrainingConfig
+from dragon.ML_callbacks import DragonPatienceEarlyStopping, DragonPlateauScheduler
+from dragon.ML_utilities import build_optimizer_params
+from dragon.schema import FeatureSchema
+from dragon.keys import TaskKeys
 from torch.optim import AdamW
 
 from paths import PM

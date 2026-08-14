@@ -13,10 +13,10 @@ jupyter:
 ---
 
 ```python
-from ml_tools.ML_datasetmaster import DragonDataset as ChosenDataset
-from ml_tools.utilities import load_dataframe_with_schema
-from ml_tools.schema import FeatureSchema
-from ml_tools.keys import TaskKeys
+from dragon.ML_datasetmaster import DragonDataset as ChosenDataset
+from dragon.utilities import load_dataframe_with_schema
+from dragon.schema import FeatureSchema
+from dragon.keys import TaskKeys
 
 from paths import PM
 ```

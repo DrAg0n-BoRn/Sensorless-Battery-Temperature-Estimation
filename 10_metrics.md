@@ -13,8 +13,8 @@ jupyter:
 ---
 
 ```python
-from ml_tools.utilities import load_dataframe, merge_dataframes, save_dataframe_filename
-from ml_tools.path_manager import list_subdirectories
+from dragon.utilities import load_dataframe, merge_dataframes, save_dataframe_filename
+from dragon.path_manager import list_subdirectories
 
 from pathlib import Path
 from paths import PM

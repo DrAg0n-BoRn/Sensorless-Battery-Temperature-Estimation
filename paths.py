@@ -1,4 +1,4 @@
-from ml_tools.path_manager import DragonPathManager
+from dragon.path_manager import DragonPathManager
 
 
 # 1. Initialize the PathManager using this file as the anchor, adding base directories.
