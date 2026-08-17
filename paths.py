@@ -43,29 +43,32 @@ PM.regression_tabnet = PM.regression / "TabNet"
 PM.regression_gate = PM.regression / "GATE"
 
 ### Sequence-to-Value
-PM.sequence = PM.results / "4 Sequence-to-Value"
+PM.sequence = PM.results / "5 Sequence-to-Value"
 PM.sequence_lstm = PM.sequence / "LSTM"
 PM.sequence_transformer = PM.sequence / "Transformer"
 
 ### Sequence-to-Sequence
-PM.seq_seq = PM.results / "5 Sequence-to-Sequence"
+PM.seq_seq = PM.results / "6 Sequence-to-Sequence"
 PM.seq_seq_lstm = PM.seq_seq / "LSTM"
 PM.seq_seq_transformer = PM.seq_seq / "Transformer"
 
 # physics informed ML
-PM.pilf = PM.results / "6 Physics-Informed ML"
+PM.pilf = PM.results / "7 Physics-Informed ML"
 PM.pilf_lstm = PM.pilf / "LSTM-PILF"
 
 # physics informed ML V2
-PM.pilf_v2 = PM.results / "7 Physics-Informed ML V2"
+PM.pilf_v2 = PM.results / "8 Physics-Informed ML V2"
 PM.pilf_v2_lstm = PM.pilf_v2 / "LSTM-PILF-V2"
 
 # physics informed ML V3 - Seq-Val
-PM.pilf_v3 = PM.results / "8 Physics-Informed ML V3 Seq-Val"
+PM.pilf_v3 = PM.results / "9 Physics-Informed ML V3 Seq-Val"
 PM.pilf_v3_lstm = PM.pilf_v3 / "LSTM-PILF-V3"
 
 # Metrics DataFrames
-PM.metrics = PM.results / "9 Metrics DataFrames"
+PM.metrics = PM.results / "10 Metrics DataFrames"
+
+# Metrics Chosen Models
+PM.metrics_chosen = PM.results / "11 Metrics Chosen Models"
 
 # 3. Make directories and check status
 PM.make_dirs()
