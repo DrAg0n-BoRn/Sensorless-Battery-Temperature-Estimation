@@ -115,7 +115,7 @@ class SequenceThermalInformedTrainer(DragonSequenceTrainer):
         return loss
 
     def _train_step(self) -> dict[str, float]:
-        """Overridden to pass `features` into `_compute_loss`[cite: 1]."""
+        """Overridden to pass `features` into `_compute_loss`."""
         self.model.train()
         running_loss = 0.0
         total_samples = 0
@@ -156,7 +156,7 @@ class SequenceThermalInformedTrainer(DragonSequenceTrainer):
         return {PyTorchLogKeys.TRAIN_LOSS: running_loss / total_samples}
 
     def _validation_step(self) -> dict[str, float]:
-        """Overridden to pass `features` into `_compute_loss`[cite: 1]."""
+        """Overridden to pass `features` into `_compute_loss`."""
         self.model.eval()
         running_loss = 0.0
         total_samples = 0

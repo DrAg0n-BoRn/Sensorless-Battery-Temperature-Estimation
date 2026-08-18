@@ -206,20 +206,20 @@ def get_scaled_thermal_boundaries(dataset, t_env_min=296.0, t_max_limit=310.0, t
     """
     target_scaler = dataset.target_scaler
     
-    # Bypass if no scaling was applied to the targets[cite: 9]
+    # Bypass if no scaling was applied to the targets
     if target_scaler is None or target_scaler.mean_ is None:
         return t_env_min, t_max_limit
         
     target_idx = dataset.target_names.index(target_name)
     
-    # Create a dummy tensor matching the target feature space[cite: 3, 9]
+    # Create a dummy tensor matching the target feature space
     dummy_tensor = torch.zeros((2, dataset.number_of_targets), dtype=torch.float32)
     
     # Inject the physical values into the designated target column
     dummy_tensor[0, target_idx] = t_env_min
     dummy_tensor[1, target_idx] = t_max_limit
     
-    # Apply the standardization transformation[cite: 9]
+    # Apply the standardization transformation
     scaled_tensor = target_scaler.transform(dummy_tensor)
     
     # Extract the scaled boundary values
