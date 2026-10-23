@@ -5,15 +5,15 @@ jupyter:
       extension: .md
       format_name: markdown
       format_version: '1.3'
-      jupytext_version: 1.19.5
+      jupytext_version: 1.19.6
   kernelspec:
-    display_name: sensorless-battery-temperature-estimation (3.12.12)
+    display_name: sensorless-battery-temperature-estimation (3.14.9)
     language: python
     name: python3
 ---
 
 ```python
-from dragon.utilities import load_dataframe, merge_dataframes, save_dataframe_filename
+from dragon.utilities import load_dataframe, merge_dataframes_vertical, save_dataframe_filename
 from dragon.path_manager import list_subdirectories
 
 from pathlib import Path
@@ -62,7 +62,7 @@ print(len(all_test_metrics_df), len(all_val_metrics_df))
 
 ```python
 # merge all test metrics dataframes into one
-merged_test_metrics_df = merge_dataframes(*all_test_metrics_df, reset_index=True, direction="vertical")
+merged_test_metrics_df = merge_dataframes_vertical(all_test_metrics_df, reset_index=True)
 
 # reorder columns to have Model first
 cols = merged_test_metrics_df.columns.tolist()
@@ -76,7 +76,7 @@ merged_test_metrics_df
 
 ```python
 # merge all validation metrics dataframes into one
-merged_val_metrics_df = merge_dataframes(*all_val_metrics_df, reset_index=True, direction="vertical")
+merged_val_metrics_df = merge_dataframes_vertical(all_val_metrics_df, reset_index=True)
 
 # reorder columns to have Model first
 cols = merged_val_metrics_df.columns.tolist()

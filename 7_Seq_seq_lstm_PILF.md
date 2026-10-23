@@ -5,9 +5,9 @@ jupyter:
       extension: .md
       format_name: markdown
       format_version: '1.3'
-      jupytext_version: 1.19.5
+      jupytext_version: 1.19.6
   kernelspec:
-    display_name: sensorless-battery-temperature-estimation (3.12.12)
+    display_name: sensorless-battery-temperature-estimation (3.14.9)
     language: python
     name: python3
 ---
@@ -16,16 +16,16 @@ jupyter:
 from custom_trainer import SequenceThermalInformedTrainer as ChosenTrainer
 from pilf import ThermalInformedLoss
 
-from dragon.ML_datasetmaster import DragonDatasetSequenceExogenous as ChosenDataset
-from dragon.ML_models_sequence import DragonSequenceLSTM as ChosenModel
-from dragon.ML_configuration import (
+from dragon.datasetmaster import DragonDatasetSequenceExogenous as ChosenDataset
+from dragon.models_sequence import DragonSequenceLSTM as ChosenModel
+from dragon.configuration import (
     FormatExogenousSequenceSequenceMetrics as ChosenMetricsConfig, 
     FinalizeExogenousSequenceSequence as ChosenFinalizer,
     FormatRegressionMetrics
 )
 
-from dragon.ML_configuration import DragonTrainingConfig
-from dragon.ML_callbacks import DragonPatienceEarlyStopping, DragonPlateauScheduler
+from dragon.configuration import DragonTrainingConfig
+from dragon.callbacks import DragonPatienceEarlyStopping, DragonPlateauScheduler
 from dragon.ML_utilities import build_optimizer_params
 from dragon.schema import FeatureSchema
 from dragon.keys import TaskKeys
@@ -70,7 +70,7 @@ train_config = DragonTrainingConfig(
     device = "cuda:0",
     task = TaskKeys.EXOGENOUS_SEQUENCE_SEQUENCE,
     
-    targets=TARGET,
+    target=TARGET,
     weight_decay=0.2,
     early_stop_patience=25,
     scheduler_patience=6,
@@ -171,6 +171,7 @@ trainer.save_training_log(train_config=train_config)
 ```python
 trainer.finalize_model_training(finalize_config=ChosenFinalizer(filename=train_config.finalized_filename,
                                                                 target_types=dataset_train.target_types,
-                                                                last_dataset_sequence=dataset_train.last_dataset_sequence)
+                                                                last_dataset_sequence=dataset_train.last_dataset_sequence,
+                                                                target=train_config.target)
                                 )
 ```

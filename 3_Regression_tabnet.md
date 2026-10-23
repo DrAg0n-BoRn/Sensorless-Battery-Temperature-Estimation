@@ -5,24 +5,24 @@ jupyter:
       extension: .md
       format_name: markdown
       format_version: '1.3'
-      jupytext_version: 1.19.5
+      jupytext_version: 1.19.6
   kernelspec:
-    display_name: sensorless-battery-temperature-estimation (3.12.12)
+    display_name: sensorless-battery-temperature-estimation (3.14.9)
     language: python
     name: python3
 ---
 
 ```python
-from dragon.ML_datasetmaster import DragonDataset as ChosenDataset
-from dragon.ML_trainer import DragonTrainer as ChosenTrainer
-from dragon.ML_models import DragonTabNet as ChosenModel
-from dragon.ML_configuration import (
+from dragon.datasetmaster import DragonDataset as ChosenDataset
+from dragon.trainer import DragonTrainer as ChosenTrainer
+from dragon.models import DragonTabNet as ChosenModel
+from dragon.configuration import (
     FormatRegressionMetrics as ChosenMetricsConfig, 
     FinalizeRegression as ChosenFinalizer  
 )
 
-from dragon.ML_configuration import DragonTrainingConfig
-from dragon.ML_callbacks import DragonPatienceEarlyStopping, DragonPlateauScheduler
+from dragon.configuration import DragonTrainingConfig
+from dragon.callbacks import DragonPatienceEarlyStopping, DragonPlateauScheduler
 from dragon.ML_utilities import build_optimizer_params
 from dragon.schema import FeatureSchema
 from dragon.keys import TaskKeys
@@ -67,7 +67,7 @@ train_config = DragonTrainingConfig(
     device = "cuda:0",
     finalized_filename = "tabnet",
     
-    targets=TARGET,
+    target=TARGET,
     weight_decay=0.01,
     early_stop_patience=25,
     scheduler_patience=4,
@@ -156,5 +156,5 @@ trainer.save_training_log(train_config=train_config)
 
 ```python
 trainer.finalize_model_training(finalize_config=ChosenFinalizer(filename=train_config.finalized_filename,
-                                                                target_name=train_config.targets))
+                                                                target_name=train_config.target))
 ```

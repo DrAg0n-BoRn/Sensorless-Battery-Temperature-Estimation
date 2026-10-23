@@ -3,9 +3,9 @@ name = "sensorless_battery_temperature_estimation"
 version = "1.1.0"
 description = "A project for estimating Li-ion cell battery surface temperature through historical temporal data."
 readme = "README.md"
-requires-python = "==3.12.*"
+requires-python = "==3.14.*"
 dependencies = [
-    "dragon-ml-toolbox[ml]==26.0.1",
+    "dragon-ml-toolbox[ml]==28.3.0",
 ]
 
 [dependency-groups]

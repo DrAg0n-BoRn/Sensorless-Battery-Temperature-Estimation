@@ -1,7 +1,7 @@
 import torch
-from dragon.ML_trainer import DragonSequenceTrainer
+from dragon.trainer import DragonSequenceTrainer
 from dragon.keys._keys import PyTorchLogKeys
-from dragon.ML_scaler import DragonScaler
+from dragon.scaler import DragonScaler
 from dragon.schema import FeatureSchema
 from constants import EngineeredColumns
 

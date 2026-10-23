@@ -5,9 +5,9 @@ jupyter:
       extension: .md
       format_name: markdown
       format_version: '1.3'
-      jupytext_version: 1.19.5
+      jupytext_version: 1.19.6
   kernelspec:
-    display_name: sensorless-battery-temperature-estimation (3.12.12)
+    display_name: sensorless-battery-temperature-estimation (3.14.9)
     language: python
     name: python3
 ---
@@ -25,7 +25,7 @@ from dragon.data_exploration import (summarize_dataframe,
                                        plot_target_temporal_analysis,
                                        show_null_columns)
 from dragon.outlier_detection import drop_outliers_rule
-from dragon.utilities import load_dataframe, save_dataframe_with_schema, merge_dataframes
+from dragon.utilities import load_dataframe, save_dataframe_with_schema, merge_dataframes_horizontal
 from dragon.schema import finalize_feature_schema
 
 from paths import PM
@@ -255,11 +255,11 @@ This is based on the analysis of the temporal dependencies in the data.
 ## 6. Merge dataframes
 
 ```python
-df_train_final = merge_dataframes(df_train_features, df_train_targets, direction="horizontal")
+df_train_final = merge_dataframes_horizontal([df_train_features, df_train_targets])
 ```
 
 ```python
-df_test_final = merge_dataframes(df_test_features, df_test_targets, direction="horizontal")
+df_test_final = merge_dataframes_horizontal([df_test_features, df_test_targets])
 ```
 
 ```python
@@ -278,12 +278,12 @@ show_null_columns(df_test_final)
 ## 7. Create Feature Schema
 
 ```python
-schema_regression = finalize_feature_schema(df_features=df_test_features, categorical_mappings=None)
+schema_regression = finalize_feature_schema(features=df_test_features, categorical_mappings=None)
 ```
 
 ```python
 # target must be included for sequence-to-value pipeline
-schema_sequence = finalize_feature_schema(df_features=df_test_final, categorical_mappings=None)
+schema_sequence = finalize_feature_schema(features=df_test_final, categorical_mappings=None)
 ```
 
 ## 8. Save Artifacts

@@ -5,15 +5,15 @@ jupyter:
       extension: .md
       format_name: markdown
       format_version: '1.3'
-      jupytext_version: 1.19.5
+      jupytext_version: 1.19.6
   kernelspec:
-    display_name: sensorless-battery-temperature-estimation (3.12.12)
+    display_name: sensorless-battery-temperature-estimation (3.14.9)
     language: python
     name: python3
 ---
 
 ```python
-from dragon.ML_datasetmaster import DragonDataset as ChosenDataset
+from dragon.datasetmaster import DragonDataset as ChosenDataset
 from dragon.utilities import load_dataframe_with_schema
 from dragon.schema import FeatureSchema
 from dragon.keys import TaskKeys

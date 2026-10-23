@@ -5,15 +5,15 @@ jupyter:
       extension: .md
       format_name: markdown
       format_version: '1.3'
-      jupytext_version: 1.19.5
+      jupytext_version: 1.19.6
   kernelspec:
-    display_name: sensorless-battery-temperature-estimation (3.12.12)
+    display_name: sensorless-battery-temperature-estimation (3.14.9)
     language: python
     name: python3
 ---
 
 ```python
-from dragon.utilities import load_dataframe, merge_dataframes, save_dataframe_filename
+from dragon.utilities import load_dataframe, merge_dataframes_vertical, save_dataframe_filename
 from dragon.path_manager import list_files_by_extension_global, list_subdirectories
 
 from paths import PM
@@ -44,11 +44,11 @@ for model_name, subpath in all_model_dirs.items():
 ```
 
 ```python
-test_df = merge_dataframes(*test_metrics_dfs, reset_index=True, direction="vertical")
+test_df = merge_dataframes_vertical(test_metrics_dfs, reset_index=True)
 ```
 
 ```python
-validation_df = merge_dataframes(*validation_metrics_dfs, reset_index=True, direction="vertical")
+validation_df = merge_dataframes_vertical(validation_metrics_dfs, reset_index=True)
 ```
 
 ```python
